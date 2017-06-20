@@ -4,8 +4,8 @@
 #include "camESPWebServer.h"
 #include <ESP8266mDNS.h>
 
-const char* ssid = ".....";
-const char* password = ".....";
+const char* ssid = "shortbus";
+const char* password = "huskyraven640";
 
 camESP8266WebServer server(80);
 
@@ -37,25 +37,26 @@ void handleNotFound() {
 void setup(void) {
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
-  Serial.begin(115200);
+  Serial1.begin(115200);  // GPIO 02 Tx only / Rx used for onboard flash?
+  
   WiFi.begin(ssid, password);
-  Serial.println("");
+  Serial1.println("");
 
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    Serial1.print(".");
   }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-  Serial.print("Data RAM: ");
-  Serial.println(ESP.getFreeHeap());
+  Serial1.println("");
+  Serial1.print("Connected to ");
+  Serial1.println(ssid);
+  Serial1.print("IP address: ");
+  Serial1.println(WiFi.localIP());
+  Serial1.print("Data RAM: ");
+  Serial1.println(ESP.getFreeHeap());
 
   if (MDNS.begin("esp8266")) {
-    Serial.println("MDNS responder started");
+    Serial1.println("MDNS responder started");
   }
 
   server.on("/", handleRoot);
@@ -71,7 +72,7 @@ void setup(void) {
   server.onNotFound(handleNotFound);
 
   server.begin();
-  Serial.println("HTTP server started");
+  Serial1.println("HTTP server started");
   server.camVerify();
 }
 
